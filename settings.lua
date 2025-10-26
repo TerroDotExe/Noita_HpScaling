@@ -27,148 +27,36 @@ function mod_setting_change_callback( mod_id, gui, in_main_menu, setting, old_va
 	print( tostring(new_value) )
 end
 
-local mod_id = "example" -- This should match the name of your mod's folder.
+local mod_id = "NoitaHpScaling" -- This should match the name of your mod's folder.
 mod_settings_version = 1 -- This is a magic global that can be used to migrate settings to new mod versions. call mod_settings_get_version() before mod_settings_update() to get the old value. 
 mod_settings = 
 {
 	{
-		id = "_",
-		ui_name = "NOTE: This is just an example of mod settings. These don't actually affect anything.",
-		not_setting = true,
-	},
+			id = "base_mult",
+			ui_name = "Basic Global Multiplier",
+			ui_description = "This will multiply by the value you set it to with no further \nmodification; can exaggerate all other effects.",
+			value_default = 1,
+			value_min = 1,
+			value_max = 100,
+			value_display_multiplier = 1,
+			value_display_formatting = " $0 X",
+			scope = MOD_SETTING_SCOPE_RUNTIME,
+			--[change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
+	},		
 	{
-		category_id = "group_of_settings",
-		ui_name = "GROUP",
-		ui_description = "Multiple settings together",
-		settings = {
-			{
-				id = "world_size",
-				ui_name = "World size",
-				ui_description = "How much world do you want?",
-				value_default = "small",
-				values = { {"small","Small"}, {"medium","Medium"}, {"huge","Huge"} },
-				scope = MOD_SETTING_SCOPE_NEW_GAME,
-				change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
-			},
-			{
-				id = "difficulty",
-				ui_name = "Difficulty",
-				ui_description = "Challenge amount.",
-				value_default = "easy",
-				values = { {"easy","Easy"}, {"normal","Normal"}, {"hard","Hard"} },
-				scope = MOD_SETTING_SCOPE_RUNTIME,
-			},
-			{
-				id = "minibosses_enabled",
-				ui_name = "Minibosses",
-				ui_description = "Minibosses spawn occasionally.",
-				value_default = true,
-				scope = MOD_SETTING_SCOPE_RUNTIME,
-			},
-			{
-				category_id = "sub_group_of_settings",
-				ui_name = "SUB GROUP WITH FOLDING",
-				ui_description = "Multiple settings together in a foldable group",
-				foldable = true,
-				_folded = true, -- this field will be automatically added to each gategory table to store the current folding state
-				settings = {
-					{
-						id = "world_size2",
-						ui_name = "World size 2",
-						ui_description = "How much world do you want?",
-						value_default = "small",
-						values = { {"small","Small"}, {"medium","Medium"}, {"huge","Huge"} },
-						scope = MOD_SETTING_SCOPE_NEW_GAME,
-						change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
-					},
-					{
-						id = "difficulty2",
-						ui_name = "Difficulty 2",
-						ui_description = "Challenge amount.",
-						value_default = "easy",
-						values = { {"easy","Easy"}, {"normal","Normal"}, {"hard","Hard"} },
-						scope = MOD_SETTING_SCOPE_RUNTIME,
-					},
-					{
-						id = "minibosses_enabled2",
-						ui_name = "Minibosses 2",
-						ui_description = "Minibosses spawn occasionally.",
-						value_default = true,
-						scope = MOD_SETTING_SCOPE_RUNTIME,
-					},
-				},
-			},
-		},
+			id = "10x",
+			ui_name = "Not Hard Enough?",
+			ui_description = "10x. Flip the switch if you dare.",
+			value_default = 0,
+			value_min = 0,
+			value_max = 1,
+			value_display_multiplier = 1,
+			value_display_formatting = "Lunatic.",
+			scope = MOD_SETTING_SCOPE_RUNTIME,
 	},
-	{
-		category_id = "group_of_settings2",
-		ui_name = "ANOTHER GROUP",
-		ui_description = "Multiple settings together",
-		settings = {
-			{
-				id = "custom_cape",
-				ui_name = "Custom cape",
-				ui_description = "",
-				value_default = true,
-				scope = MOD_SETTING_SCOPE_RUNTIME_RESTART,
-			},
-			{
-				id = "extra_health",
-				ui_name = "Extra starting health",
-				ui_description = "Extra HP",
-				value_default = 4,
-				value_min = 0,
-				value_max = 10,
-				value_display_multiplier = 25,
-				value_display_formatting = " $0 HP",
-				scope = MOD_SETTING_SCOPE_NEW_GAME,
-			},
-			{
-				id = "custom_events_enabled",
-				ui_name = "Custom events",
-				ui_description = "",
-				value_default = true,
-				scope = MOD_SETTING_SCOPE_RUNTIME,
-			},
-			{
-				id = "password",
-				ui_name = "Password",
-				ui_description = "Textbox.",
-				value_default = "root",
-				text_max_length = 20,
-				allowed_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_0123456789",
-				scope = MOD_SETTING_SCOPE_NEW_GAME,
-			},
-			{
-				id = "custom_ui",
-				ui_name = "This setting has got some custom UI",
-				ui_description = "",
-				value_default = true,
-				scope = MOD_SETTING_SCOPE_RUNTIME,
-				ui_fn = mod_setting_bool_custom, -- custom widget
-			},
-			{
-				ui_fn = mod_setting_vertical_spacing,
-				not_setting = true,
-			},
-			{
-				id = "secret_setting",
-				ui_name = "Secret setting",
-				value_default = true,
-				hidden = true,
-			},
-			{
-				id = "Text, not a setting",
-				ui_name = "Just a title, not a setting",
-				not_setting = true,
-			},
-			{
-				image_filename = "data/ui_gfx/game_over_menu/game_over.png",
-				ui_fn = mod_setting_image,
-			},
-		},
-	},
+			
 }
+
 
 -- This function is called to ensure the correct setting values are visible to the game via ModSettingGet(). your mod's settings don't work if you don't have a function like this defined in settings.lua.
 -- This function is called:
