@@ -27,7 +27,7 @@ function mod_setting_change_callback( mod_id, gui, in_main_menu, setting, old_va
 	print( tostring(new_value) )
 end
 
-local mod_id = "NoitaHpScaling" -- This should match the name of your mod's folder.
+local mod_id = "Noita_HpScaling" -- This should match the name of your mod's folder.
 mod_settings_version = 1 -- This is a magic global that can be used to migrate settings to new mod versions. call mod_settings_get_version() before mod_settings_update() to get the old value. 
 mod_settings = 
 {
@@ -42,7 +42,19 @@ mod_settings =
 			value_display_formatting = " $0 X",
 			scope = MOD_SETTING_SCOPE_RUNTIME,
 			--[change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
-	},		
+	},	
+	{
+			id = "orbs_mult",
+			ui_name = "Orbs Multiplier",
+			ui_description = "Value addition per orb (Not Multiplicative) \nEg. where BGM = 3, OM = 1 \nWhen you have 1 orb, Multiplier=4. 2 orbs, Multiplier=5",
+			value_default = 0,
+			value_min = 0,
+			value_max = 100,
+			value_display_multiplier = 1,
+			value_display_formatting = " $0 Be careful with those orbs.",
+			scope = MOD_SETTING_SCOPE_RUNTIME,
+	},
+	
 	{
 			id = "10x",
 			ui_name = "Not Hard Enough?",
@@ -54,6 +66,7 @@ mod_settings =
 			value_display_formatting = "Lunatic.",
 			scope = MOD_SETTING_SCOPE_RUNTIME,
 	},
+	
 			
 }
 

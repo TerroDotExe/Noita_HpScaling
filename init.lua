@@ -1,6 +1,6 @@
 
 dofile_once("data/scripts/lib/utilities.lua")
-dofile ("mods/Noita_HpScaling/settings.lua")
+dofile_once("mods/Noita_HpScaling/settings.lua")
 local function GetPlayerEntity()
     local players = EntityGetWithTag("player_unit") or {}
     if #players >= 1 then
@@ -33,15 +33,6 @@ function OnPlayerSpawned(player_entity)
     -- Orb to difficulty
     -- Time to difficulty
     -- kills to difficulty
-	local basemult = ModSettingGet("Noita_HpScaling.base_mult")
-
-
-	GamePrint("hi" ..tostring (basemult))
-    GamePrint("Terro's HP Scaling Active!")
-    TerroInternalHpX = 10
-    GamePrint("Terro's HP Scaling Current Value: " .. tostring(TerroInternalHpX))
-
-end
 
 function OnWorldPreUpdate() -- This is called every time the game is about to start updating the world
     local player_entity = GetPlayerEntity()
@@ -71,7 +62,7 @@ function OnWorldPreUpdate() -- This is called every time the game is about to st
                 local health_comps = EntityGetComponent(enemy, "DamageModelComponent") or {}
                 for _, health_comp in ipairs(health_comps) do
                     local max_hp = ComponentGetValue2(health_comp, "max_hp")
-                    local new_hp = max_hp * TerroInternalHpX
+                    local new_hp = max_hp * terro_internal_hp_x
                     ComponentSetValue2(health_comp, "max_hp", new_hp)
                     ComponentSetValue2(health_comp, "hp", new_hp)
                 end
@@ -82,4 +73,16 @@ function OnWorldPreUpdate() -- This is called every time the game is about to st
             end
         end
     end
+
+end
+	local orbmult = ModSettingGet("Noita_HpScaling.orbs_mult")
+	local orbcalc = orbmult*GameGetOrbCountThisRun()
+	local unused_value2 = 1
+	local unused_value3 = 1 
+	local basemult = ModSettingGet("Noita_HpScaling.base_mult")
+	local terro_lunacy = ModSettingGet("Noita_HpScaling.10x")
+    GamePrint("Terro's HP Scaling Active!")
+	terro_internal_hp_raw =  ((basemult+orbcalc) * ((terro_lunacy*9+1))*unused_value2*unused_value3)
+    terro_internal_hp_x = math.floor(terro_internal_hp_raw)
+	GamePrint("Terro's HP Scaling Current Value: " .. tostring(terro_internal_hp_x))
 end
