@@ -1,7 +1,6 @@
 
 dofile_once("data/scripts/lib/utilities.lua")
-dofile_once("mods/Noita_HpScaling/settings.lua")
-
+dofile ("mods/Noita_HpScaling/settings.lua")
 local function GetPlayerEntity()
     local players = EntityGetWithTag("player_unit") or {}
     if #players >= 1 then
@@ -26,9 +25,6 @@ local function get_nearby_enemies(x, y, radius)
     return enemies
 end
 
-
-
-
 function OnPlayerSpawned(player_entity)
     -- planned features;
     -- Distance to Difficulty (player_entity location to 0, 0)
@@ -37,17 +33,14 @@ function OnPlayerSpawned(player_entity)
     -- Orb to difficulty
     -- Time to difficulty
     -- kills to difficulty
-function ModSettingsUpdate( init_scope )
-	local old_version = mod_settings_get_version( mod_id ) -- This can be used to migrate some settings between mod versions.
-	mod_settings_update( mod_id, mod_settings, init_scope )
-	
-	Basemult = tonumber (ModSettingGet("base_mult"))
-	LunaticMode = tonumber (ModSettingGet("10x"))
-	GamePrint ("Lunacy: "..tostring (LunaticMode))
-	TerroFinalHpX = (Basemult * (LunaticMode+1))
+	local basemult = ModSettingGet("Noita_HpScaling.base_mult")
 
+
+	GamePrint("hi" ..tostring (basemult))
     GamePrint("Terro's HP Scaling Active!")
-GamePrint ("Your Settings: " ..tostring (TerroFinalHpX))
+    TerroInternalHpX = 10
+    GamePrint("Terro's HP Scaling Current Value: " .. tostring(TerroInternalHpX))
+
 end
 
 function OnWorldPreUpdate() -- This is called every time the game is about to start updating the world
@@ -58,7 +51,7 @@ function OnWorldPreUpdate() -- This is called every time the game is about to st
 
     local frames = GameGetFrameNum()
     local update_rate = 360
-    local range = 800
+    local range = 400
     if frames % update_rate == 0 then
         local px, py = EntityGetTransform(player_entity)
         local enemies = get_nearby_enemies(px, py, range)
@@ -67,20 +60,18 @@ function OnWorldPreUpdate() -- This is called every time the game is about to st
         for _, enemy in ipairs(enemies) do
             local was_modified = false;
             local components = EntityGetComponent(enemy, "VariableStorageComponent") or {}
-
             for _, comp in ipairs(components) do
                 local name = ComponentGetValue2(comp, "name")
                 if(name == "terro_hp_scaled")then
                     was_modified = true
                     break
                 end
-				
             end
             if(was_modified == false)then
                 local health_comps = EntityGetComponent(enemy, "DamageModelComponent") or {}
                 for _, health_comp in ipairs(health_comps) do
                     local max_hp = ComponentGetValue2(health_comp, "max_hp")
-                    local new_hp = max_hp * TerroFinalHpX
+                    local new_hp = max_hp * TerroInternalHpX
                     ComponentSetValue2(health_comp, "max_hp", new_hp)
                     ComponentSetValue2(health_comp, "hp", new_hp)
                 end
@@ -91,8 +82,4 @@ function OnWorldPreUpdate() -- This is called every time the game is about to st
             end
         end
     end
-end
-
-    GamePrint("Terro's HP Scaling Current Value: " .. tostring(TerroFinalHpX))
-
 end
