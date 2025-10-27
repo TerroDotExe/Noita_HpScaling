@@ -54,7 +54,30 @@ mod_settings =
 			value_display_formatting = " $0 Be careful with those orbs.",
 			scope = MOD_SETTING_SCOPE_RUNTIME,
 	},
-	
+	{
+			id = "hp_mult",
+			ui_name = "WIP, Does nothing",
+			ui_description = "(psst imma add hp scaling)",
+			value_default = 0,
+			value_min = 1,
+			value_max = 100,
+			value_display_multiplier = 1,
+			value_display_formatting = " $0 X",
+			scope = MOD_SETTING_SCOPE_RUNTIME,
+			--[change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
+	},
+	{
+			id = "damper",
+			ui_name = "Percent difficulty damping",
+			ui_description = "Percent of final calculation that is sent to Enemy HP.\n50 = 1/2 of all multipliers are applied.\nGood for fine-tuning difficulty, if you're not absolutely Cracked",
+			value_default = 100,
+			value_min = 1,
+			value_max = 100,
+			value_display_multiplier = 1,
+			value_display_formatting = " $0 %",
+			scope = MOD_SETTING_SCOPE_RUNTIME,
+			--[change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
+	},
 	{
 			id = "10x",
 			ui_name = "Not Hard Enough?",

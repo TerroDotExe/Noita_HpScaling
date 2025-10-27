@@ -41,8 +41,8 @@ function OnWorldPreUpdate() -- This is called every time the game is about to st
     end
 
     local frames = GameGetFrameNum()
-    local update_rate = 360
-    local range = 400
+    local update_rate = 120
+    local range = 1000
     if frames % update_rate == 0 then
         local px, py = EntityGetTransform(player_entity)
         local enemies = get_nearby_enemies(px, py, range)
@@ -62,7 +62,7 @@ function OnWorldPreUpdate() -- This is called every time the game is about to st
                 local health_comps = EntityGetComponent(enemy, "DamageModelComponent") or {}
                 for _, health_comp in ipairs(health_comps) do
                     local max_hp = ComponentGetValue2(health_comp, "max_hp")
-                    local new_hp = max_hp * terro_internal_hp_x
+                    local new_hp = max_hp * TerroInternalHpX
                     ComponentSetValue2(health_comp, "max_hp", new_hp)
                     ComponentSetValue2(health_comp, "hp", new_hp)
                 end
@@ -75,14 +75,18 @@ function OnWorldPreUpdate() -- This is called every time the game is about to st
     end
 
 end
+    local player_hp_count = 1
 	local orbmult = ModSettingGet("Noita_HpScaling.orbs_mult")
-	local orbcalc = orbmult*GameGetOrbCountThisRun()
-	local unused_value2 = 1
-	local unused_value3 = 1 
+    local orbmultrounded = math.floor(orbmult+0.5)
+    local orbcount = GameGetOrbCountThisRun()
+	local orbcalc = orbmultrounded*orbcount
+	local unused_value3 = 1
 	local basemult = ModSettingGet("Noita_HpScaling.base_mult")
-	local terro_lunacy = ModSettingGet("Noita_HpScaling.10x")
+    local basemultrounded =  math.floor(basemult+0.5)
+	local lunacy = ModSettingGet("Noita_HpScaling.10x")
+    local percent_damper = ModSettingGet("Noita_HpScaling.damper")
+    local percent_damper_rounded = math.floor(percent_damper+0.5)
     GamePrint("Terro's HP Scaling Active!")
-	terro_internal_hp_raw =  ((basemult+orbcalc) * ((terro_lunacy*9+1))*unused_value2*unused_value3)
-    terro_internal_hp_x = math.floor(terro_internal_hp_raw)
-	GamePrint("Terro's HP Scaling Current Value: " .. tostring(terro_internal_hp_x))
+	TerroInternalHpX = ((basemultrounded+orbcalc) * ((lunacy*9+1))*player_hp_count*unused_value3)/(100/percent_damper_rounded)
+	GamePrint("Terro's HP Scaling Current Value: " .. tostring(TerroInternalHpX))
 end
